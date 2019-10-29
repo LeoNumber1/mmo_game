@@ -31,7 +31,8 @@ func OnConnectionAdd(conn ziface.IConnection) {
 	core.WorldMgrObj.AddPlayer(player)
 	//=============将该连接绑定属性Pid======================
 	conn.SetProperty("pid", player.Pid)
-	//=====================================================
+	//=========同步周边玩家上线信息，与现实周边玩家信息=========
+	player.SyncSurrounding()
 
 	fmt.Println("======> Player pidId =", player.Pid, " arrived =====")
 }

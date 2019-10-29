@@ -43,6 +43,7 @@ message SyncPlayers{
     repeated Player ps=1;
 }
 
+//玩家信息
 message Player{
     int32 Pid=1;
     Position P=2;
