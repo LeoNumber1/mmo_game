@@ -2,15 +2,6 @@ package core
 
 import "sync"
 
-const (
-	AOI_MIN_X  int = 0
-	AOI_MAX_X  int = 1000
-	AOI_CNTS_X int = 100
-	AOI_MIN_Y  int = 0
-	AOI_MAX_Y  int = 1000
-	AOI_CNTS_Y int = 100
-)
-
 /*
 	当前游戏世界的总管理模块
 */

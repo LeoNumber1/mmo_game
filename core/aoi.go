@@ -2,6 +2,15 @@ package core
 
 import "fmt"
 
+const (
+	AOI_MIN_X  int = 85
+	AOI_MAX_X  int = 410
+	AOI_CNTS_X int = 10
+	AOI_MIN_Y  int = 75
+	AOI_MAX_Y  int = 400
+	AOI_CNTS_Y int = 20
+)
+
 /*
    AOI管理模块
 */
@@ -38,9 +47,9 @@ func NewAOIManager(minX, maxX, cntsX, minY, maxY, cntsY int) *AOIManager {
 
 			//初始化一个格子放在AOI中的map里，key是当前格子的ID
 			aoiMgr.grids[gid] = NewGrid(gid,
-				aoiMgr.MinX+ x*aoiMgr.gridWidth(),
+				aoiMgr.MinX+x*aoiMgr.gridWidth(),
 				aoiMgr.MinX+(x+1)*aoiMgr.gridWidth(),
-				aoiMgr.MinY+ y*aoiMgr.gridLength(),
+				aoiMgr.MinY+y*aoiMgr.gridLength(),
 				aoiMgr.MinY+(y+1)*aoiMgr.gridLength())
 		}
 	}
@@ -62,7 +71,7 @@ func (m *AOIManager) gridLength() int {
 func (m *AOIManager) String() string {
 	s := fmt.Sprintf("AOIManagr:\nminX:%d, maxX:%d, cntsX:%d, minY:%d, maxY:%d, cntsY:%d\n Grids in AOI Manager:\n",
 		m.MinX, m.MaxX, m.CntsX, m.MinY, m.MaxY, m.CntsY)
-	for _,grid := range m.grids {
+	for _, grid := range m.grids {
 		s += fmt.Sprintln(grid)
 	}
 
@@ -72,12 +81,12 @@ func (m *AOIManager) String() string {
 //根据格子的gID得到当前周边的九宫格信息
 func (m *AOIManager) GetSurroundGridsByGid(gID int) (grids []*Grid) {
 	//判断gID是否存在
-	if _, ok := m.grids[gID]; !ok  {
+	if _, ok := m.grids[gID]; !ok {
 		return
 	}
 
 	//将当前gid添加到九宫格中
-	grids  = append(grids, m.grids[gID])
+	grids = append(grids, m.grids[gID])
 
 	//根据gid得到当前格子所在的X轴编号
 	idx := gID % m.CntsX
@@ -87,7 +96,7 @@ func (m *AOIManager) GetSurroundGridsByGid(gID int) (grids []*Grid) {
 		grids = append(grids, m.grids[gID-1])
 	}
 	//判断当前的idx右边是否还有格子
-	if idx < m.CntsX - 1 {
+	if idx < m.CntsX-1 {
 		grids = append(grids, m.grids[gID+1])
 	}
 
@@ -109,10 +118,63 @@ func (m *AOIManager) GetSurroundGridsByGid(gID int) (grids []*Grid) {
 			grids = append(grids, m.grids[v-m.CntsX])
 		}
 		//判断当前的idy下边是否还有格子
-		if idy < m.CntsY - 1 {
+		if idy < m.CntsY-1 {
 			grids = append(grids, m.grids[v+m.CntsX])
 		}
 	}
 
 	return
+}
+
+//通过横纵坐标获取对应的格子ID
+func (m *AOIManager) GetGidByPos(x, y float32) int {
+	gx := (int(x) - m.MinX) / m.gridWidth()
+	gy := (int(y) - m.MinY) / m.gridLength()
+
+	return gy*m.CntsX + gx
+}
+
+//通过横纵坐标得到周边九宫格内的全部PlayerIDs
+func (m *AOIManager) GetPidsByPos(x, y float32) (playerIDs []int) {
+	//根据横纵坐标得到当前坐标属于哪个格子ID
+	gID := m.GetGidByPos(x, y)
+
+	//根据格子ID得到周边九宫格的信息
+	grids := m.GetSurroundGridsByGid(gID)
+	for _, v := range grids {
+		playerIDs = append(playerIDs, v.GetPlyerIDs()...)
+		//fmt.Printf("===> grid ID : %d, pids : %v  ====", v.GID, v.GetPlyerIDs())
+	}
+
+	return
+}
+
+//通过GID获取当前格子的全部playerID
+func (m *AOIManager) GetPidsByGid(gID int) (playerIDs []int) {
+	playerIDs = m.grids[gID].GetPlyerIDs()
+	return
+}
+
+//移除一个格子中的PlayerID
+func (m *AOIManager) RemovePidFromGrid(pID, gID int) {
+	m.grids[gID].Remove(pID)
+}
+
+//添加一个PlayerID到一个格子中
+func (m *AOIManager) AddPidToGrid(pID, gID int) {
+	m.grids[gID].Add(pID)
+}
+
+//通过横纵坐标添加一个Player到一个格子中
+func (m *AOIManager) AddToGridByPos(pID int, x, y float32) {
+	gID := m.GetGidByPos(x, y)
+	grid := m.grids[gID]
+	grid.Add(pID)
+}
+
+//通过横纵坐标把一个Player从对应的格子中删除
+func (m *AOIManager) RemoveFromGridByPos(pID int, x, y float32) {
+	gID := m.GetGidByPos(x, y)
+	grid := m.grids[gID]
+	grid.Remove(pID)
 }
