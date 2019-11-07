@@ -29,7 +29,7 @@ func (wm *WorldManager) AddPlayer(player *Player) {
 	wm.pLock.Unlock()
 
 	//将player 添加到AOI网络规划中
-	//wm.AoiMgr.AddToGridByPos(int(player.Pid), player.X, player.Z)
+	wm.AoiMgr.AddToGridByPos(int(player.Pid), player.X, player.Z)
 }
 
 //从玩家信息表中移除一个玩家
