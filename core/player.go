@@ -3,9 +3,9 @@ package core
 import (
 	"fmt"
 	"github.com/aceld/zinx/ziface"
-	"github.com/aceld/zinx/zinx_app_demo/mmo_game/pb"
 	"github.com/golang/protobuf/proto"
 	"math/rand"
+	"mmo_game/pb"
 	"sync"
 )
 

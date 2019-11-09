@@ -6,11 +6,14 @@ import (
 	"github.com/aceld/zinx/znet"
 	"mmo_game/api"
 	"mmo_game/core"
+	"mmo_game/token"
 )
 
 func main() {
 	// 创建服务器句柄
 	s := znet.NewServer()
+
+	s.AddRouter(0, &token.TokenApi{})
 
 	//注册客户端连接建立和丢失函数
 	s.SetOnConnStart(OnConnectionAdd)

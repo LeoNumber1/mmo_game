@@ -8,9 +8,9 @@ message SyncPid{
 }
 
 //同步玩家本次登录的ID(用来标识玩家), 玩家登陆之后，由Server端主动生成玩家ID发送给客户端
-//MsgID:2
+//MsgID:2   玩家聊天数据
 message Talk{
-    string Content=1;
+    string Content=1;   //聊天内容
 }
 
 //移动的坐标数据   MsgID:3
@@ -30,10 +30,10 @@ message Position{
 //玩家广播数据    MsgID:200
 message BroadCast{
     int32 Pid=1;
-    int32 Tp=2;
+    int32 Tp=2;         //1-世界聊天  2-玩家位置 3 动作 4 移动之后坐标信息更新
     oneof Data {
-        string Content=3;
-        Position P=4;
+        string Content=3;       //聊天的信息
+        Position P=4;           //广播用户的位置
         int32 ActionData=5;
     }
 }

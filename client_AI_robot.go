@@ -253,7 +253,7 @@ func NewTcpClient(ip string, port int) *TcpClient {
 }
 
 func main() {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 1; i++ {
 		client := NewTcpClient("127.0.0.1", 8999)
 		client.Start()
 		time.Sleep(1 * time.Second)

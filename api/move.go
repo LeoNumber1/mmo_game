@@ -3,10 +3,11 @@ package api
 import (
 	"fmt"
 	"github.com/aceld/zinx/ziface"
-	"github.com/aceld/zinx/zinx_app_demo/mmo_game/pb"
+	//"github.com/aceld/zinx/zinx_app_demo/mmo_game/pb"
 	"github.com/aceld/zinx/znet"
 	"github.com/golang/protobuf/proto"
 	"mmo_game/core"
+	"mmo_game/pb"
 )
 
 type MoveApi struct {

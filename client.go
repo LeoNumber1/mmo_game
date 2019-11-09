@@ -21,15 +21,19 @@ func main() {
 		return
 	}
 
-	for {
-		dp := znet.NewDataPack()
-		//msg, _ := dp.Pack(znet.NewMsgPackage(1, []byte("Zinx Client Test Message")))
-		//_, err = conn.Write(msg)
-		//if err != nil {
-		//	fmt.Println("write error err ", err)
-		//	return
-		//}
+	dp := znet.NewDataPack()
+	msg, err := dp.Pack(znet.NewMsgPackage(0, []byte("Zinx Client Test Message")))
+	fmt.Println("---msg---err---", msg, "---", err, "---")
+	_, err = conn.Write(msg)
+	if err != nil {
+		fmt.Println("write error err ", err)
+		return
+	}
+	time.Sleep(5 * time.Second)
 
+	return
+
+	for {
 		//先读出流中的head部分
 		headData := make([]byte, dp.GetHeadLen())
 		_, err = io.ReadFull(conn, headData) //ReadFull 会把msg填充满为止
