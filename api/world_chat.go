@@ -15,6 +15,8 @@ type WorldChatApi struct {
 }
 
 func (*WorldChatApi) Handle(request ziface.IRequest) {
+	fmt.Println("在世界聊天中")
+
 	//1.将客户端传来的proto协议解码
 	msg := &pb.Talk{}
 	err := proto.Unmarshal(request.GetData(), msg)

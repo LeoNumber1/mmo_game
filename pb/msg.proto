@@ -48,3 +48,10 @@ message Player{
     int32 Pid=1;
     Position P=2;
 }
+
+/*
+ * 以下为自建的方法
+ */
+message Token{
+    string token=1;
+}

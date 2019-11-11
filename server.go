@@ -6,17 +6,16 @@ import (
 	"github.com/aceld/zinx/znet"
 	"mmo_game/api"
 	"mmo_game/core"
-	"mmo_game/token"
 )
 
 func main() {
 	// 创建服务器句柄
 	s := znet.NewServer()
 
-	s.AddRouter(0, &token.TokenApi{})
+	s.AddRouter(0, &api.TokenApi{})
 
 	//注册客户端连接建立和丢失函数
-	s.SetOnConnStart(OnConnectionAdd)
+	//s.SetOnConnStart(OnConnectionAdd)
 	// =========== 注册 hook 函数 =======
 	s.SetOnConnStop(OnConnectionLost)
 	// =================================
@@ -51,7 +50,11 @@ func OnConnectionAdd(conn ziface.IConnection) {
 //当客户端断开连接的时候的hook函数
 func OnConnectionLost(conn ziface.IConnection) {
 	//获取当前连接的Pid属性
-	pid, _ := conn.GetProperty("pid")
+	pid, err := conn.GetProperty("pid")
+	if err != nil {
+		fmt.Println("退出时的err：", err)
+		return
+	}
 
 	//根据pid获取对应的玩家对象
 	player := core.WorldMgrObj.GetPlayerByPid(pid.(int32))

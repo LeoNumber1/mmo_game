@@ -15,6 +15,7 @@ type MoveApi struct {
 }
 
 func (*MoveApi) Handle(request ziface.IRequest) {
+	fmt.Println("在移动api中")
 	//1. 将客户端传来的proto协议解码
 	msg := &pb.Position{}
 	err := proto.Unmarshal(request.GetData(), msg)

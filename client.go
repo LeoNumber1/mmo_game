@@ -13,7 +13,7 @@ import (
 func main() {
 	fmt.Println("Client Test ... start")
 	//3秒之后发起测试请求，给服务端开启服务的机会
-	time.Sleep(3 * time.Second)
+	//time.Sleep(3 * time.Second)
 
 	conn, err := net.Dial("tcp", "127.0.0.1:8999")
 	if err != nil {
@@ -22,7 +22,14 @@ func main() {
 	}
 
 	dp := znet.NewDataPack()
-	msg, err := dp.Pack(znet.NewMsgPackage(0, []byte("Zinx Client Test Message")))
+	msgD := &pb.Token{}
+	msgD.Token = "8c9f08032f2f47d889b0ae99fdd8485e1"
+	msgBytes, err := proto.Marshal(msgD)
+	if err != nil {
+		fmt.Println("-------marshal err :", err)
+		return
+	}
+	msg, err := dp.Pack(znet.NewMsgPackage(0, msgBytes))
 	fmt.Println("---msg---err---", msg, "---", err, "---")
 	_, err = conn.Write(msg)
 	if err != nil {
