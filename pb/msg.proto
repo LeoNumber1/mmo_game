@@ -52,6 +52,13 @@ message Player{
 /*
  * 以下为自建的方法
  */
+
+// MsgID:0
 message Token{
     string token=1;
+}
+
+//  MsgID:99
+message Error{
+    string error=1;
 }
